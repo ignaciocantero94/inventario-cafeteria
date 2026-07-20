@@ -65,10 +65,10 @@ al definir "@app.route()" se declara por defecto GET."""
 @app.route("/supplier")
 def get_supplier():
     suppliers = Supplier.query.all()
-    resultado = []
+    result = []
     for supplier in suppliers:
-        resultado.append({"id": supplier.id, "name": supplier.name, "email": supplier.email, "phone": supplier.phone})
-    return jsonify(resultado)
+        result.append({"id": supplier.id, "name": supplier.name, "email": supplier.email, "phone": supplier.phone})
+    return jsonify(result)
 
 """Esta funcion nos permite actualizar los datos de la tabla, por eso usamos el PUT, todo el tema del if nos sirve para
 crear la condicion en el caso de que queramos modificar un proveedor que no exista, de ahi el None."""
@@ -76,13 +76,13 @@ crear la condicion en el caso de que queramos modificar un proveedor que no exis
 def update_supplier(id):
     supplier = Supplier.query.get(id)
     if supplier is None:
-        return "Supplier no encontrado", 404
+        return "Supplier not found", 404
     else:
         supplier.name = request.form['name']
         supplier.email = request.form['email']
         supplier.phone = request.form['phone']
         db.session.commit()
-        return "Supplier modificado"
+        return "Supplier modified"
 
 """Aqui estamos creando una funcion para eliminar los datos de la tabla, simplemente hay que poner el if para confirmar
 que le estamos indicando al programa que elimine a un proveedor que realmente existe."""
@@ -90,11 +90,11 @@ que le estamos indicando al programa que elimine a un proveedor que realmente ex
 def delete_supplier(id):
     supplier = Supplier.query.get(id)
     if supplier is None:
-        return "No se puede eliminar un Supplier que no existe", 404
+        return "An unexisting supplier, it cannot be deleted", 404
     else:
         db.session.delete(supplier)
         db.session.commit()
-        return "Supplier eliminado"
+        return "Supplier deleted"
 
 """El jsonify es como un traductor, la idea de esto es que los objetos (datos) se muestren en una página web, Python por sí
 mismo no puede mostrar esos objetos como texto, necesitamos un modo de traducirlo para que el archivo HTML sepa interpretar 
@@ -116,11 +116,11 @@ def create_product():
 @app.route("/product")
 def get_product():
     products = Product.query.all()
-    resultado = []
+    result = []
     for product in products:
-        resultado.append({"id": product.id, "name": product.name, "category": product.category, "unit": product.unit,
+        result.append({"id": product.id, "name": product.name, "category": product.category, "unit": product.unit,
                           "supplier_id": product.supplier_id, "minimum_stock": product.minimum_stock})
-    return jsonify(resultado)
+    return jsonify(result)
 
 """Despues de cada PUT, tenemos que ir a la terminal y añadir la funcionalidad de modificacion a nuestro server con el 
 comando "curl". """
@@ -128,7 +128,7 @@ comando "curl". """
 def update_product(id):
     product = Product.query.get(id)
     if product is None:
-        return "Product no encontrado", 404
+        return "Product not found", 404
     else:
         product.name = request.form['name']
         product.category = request.form['category']
@@ -136,17 +136,17 @@ def update_product(id):
         product.supplier_id = request.form['supplier_id']
         product.minimum_stock = request.form['minimum_stock']
         db.session.commit()
-        return "Product modificado"
+        return "Product modified"
 
 @app.route("/product/<int:id>", methods = ['DELETE'])
 def delete_product(id):
     product = Product.query.get(id)
     if product is None:
-        return "No se puede eliminar un Product que no existe", 404
+        return "An unexisting product, it cannot be removed", 404
     else:
         db.session.delete(product)
         db.session.commit()
-        return "Product eliminado"
+        return "Product deleted"
 
 @app.route("/movement", methods = ['POST'])
 def create_movement():
@@ -163,34 +163,34 @@ def create_movement():
 @app.route("/movement")
 def get_movement():
     movements = Movement.query.all()
-    resultado = []
+    result = []
     for movement in movements:
-        resultado.append({"id": movement.id, "product_id": movement.product_id, "date": movement.date,
+        result.append({"id": movement.id, "product_id": movement.product_id, "date": movement.date,
                           "quantity": movement.quantity, "movement_type": movement.movement_type})
-    return jsonify(resultado)
+    return jsonify(result)
 
 @app.route("/movement/<int:id>", methods = ['PUT'])
 def update_movement(id):
     movement = Movement.query.get(id)
     if movement is None:
-        return "Movement no encontrado", 404
+        return "Movement not found", 404
     else:
         movement.product_id = request.form['product_id']
         movement.date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
         movement.quantity = request.form['quantity']
         movement.movement_type = request.form['movement_type']
         db.session.commit()
-        return "Movimiento realizado"
+        return "Movement completed"
 
 @app.route("/movement/<int:id>", methods = ['DELETE'])
 def delete_movement(id):
     movement = Movement.query.get(id)
     if movement is None:
-        return "No se puede deshacer un Movement que no se realizó", 404
+        return "A movement that was not done, it cannot be discarded", 404
     else:
         db.session.delete(movement)
         db.session.commit()
-        return "Movement deshecho"
+        return "Movement discarded"
 
 """Esto de aqui nos sirve para que el servidor siga en funcionamiento, es necesario en el momento que
 invocamos Flask."""
