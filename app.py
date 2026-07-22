@@ -192,10 +192,27 @@ def delete_movement(id):
         db.session.commit()
         return "Movement discarded"
 
+"""Esta función nos sirve para obtener el stock real de cada producto. Lo hace restando la cantidad de artículos que 
+entran ('in') menos la cantidad de artículos que salen ('out'). Los valores de acepta movement.movement_type son: 'in/out'"""
+@app.route("/product/<int:id>/stock")
+def get_stock(id):
+    movements = Movement.query.filter_by(product_id=id).all()
+    current_stock = 0
+    product = Product.query.get(id)
+    for movement in movements:
+        if movement.movement_type == "in":
+            current_stock += movement.quantity
+        else:
+            current_stock -= movement.quantity
+    if current_stock <= product.minimum_stock:
+        refill = True
+    else:
+        refill = False
+    return jsonify({"product_id": id, "current_stock": current_stock, "needs_refill": refill})
+
 """Esto de aqui nos sirve para que el servidor siga en funcionamiento, es necesario en el momento que
 invocamos Flask."""
 with app.app_context(): db.create_all()
 
 if __name__== "__main__":
     app.run(debug=True)
-
