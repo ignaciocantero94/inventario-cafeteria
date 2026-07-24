@@ -13,9 +13,8 @@ Aplicación Web diseñada para gestionar el stock de una cafetería
 * Gestión de movimientos
 * Integridad referencial:
   - Al eliminar un proveedor, los productos que tenía asociados no se borran ni quedan corruptos, sino que su identificador se marca como NULL.
-  - Al añadir o quitar algún producto, el programa actualiza el stock de ese producto, el programa nos notificará cuál es el 
-  - stock actual (current_stock).
-  - Al quedarse algún producto sin stock, el código nos devuelve un mensaje notificando que necesita ser repuesto, con un (True o False).
+  - El programa calcula el stock de un producto sumando o restando al stock actual la cantidad que entra o sale de ese producto.
+  - Al llegar al stock mínimo de un producto, el código nos devuelve un mensaje notificando que necesita ser repuesto, con un (True o False).
 ## Instalación
 ```bash 
 git clone https://github.com/ignaciocantero94/inventario-cafeteria.git 
