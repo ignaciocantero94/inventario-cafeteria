@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Products</title>
+    </head>
+    <body>
+        <h1>Products stock</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Unit</th>
+                <th>Supplier</th>
+                <th>Minimum stock</th>
+            </tr>
+            {%for product in products%}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.category}}</td>
+                <td>{{product.unit}}</td>
+                <td>{{product.supplier_id}}</td>
+                <td>{{product.minimum_stock}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+    </body>
+</html>
